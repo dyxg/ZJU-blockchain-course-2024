@@ -70,11 +70,8 @@ const HomePage: React.FC = () => {
             return ;
         }
         try {
-            console.log(listHouseId);
-            console.log(Web3.utils.toWei(Number(listHousePrice), 'wei'));
             await BuyMyRoomContract.methods.listHouse(listHouseId, Web3.utils.toWei(Number(listHousePrice), 'wei')).send({ from: account });
             message.success('成功挂出房子');
-            // await getAllHouse();
             setIsListConfirmModalVisible(false);
             setListHouseId(null)
         }
@@ -137,31 +134,22 @@ const HomePage: React.FC = () => {
 
 
     const handlePurchase = async () => {
-        if (selectedHouseId !== null && account) {
-            try {
-                console.log(`Attempting to purchase house ${selectedHouseId} from account ${account}`);
-                if (BuyMyRoomContract && myERC20Contract) {
-                    try {
-                        await myERC20Contract.methods.approve(Addresses.BuyMyRoom, houseInfo.price).send({
-                            from: account
-                        })
-                        // 调用购买房屋的函数
-                        const fee = await BuyMyRoomContract.methods.getSellingFee(selectedHouseId).call();
-                        await BuyMyRoomContract.methods.buyHouse(selectedHouseId).send({ from: account });
-                        message.success(`成功购买房子 ${selectedHouseId}，手续费为${Number(fee)}`);
-                        setIsConfirmModalVisible(false);
-                        getAllHouse();
-                    } catch (error: any) {
-                        alert(error.message)
-                    }
-                }
-            } catch (error: unknown) {
-                const errorMessage = (error as any).message || (error as Error).message; // 捕捉不同类型的错误
-                console.error(error);
-                message.error(`${errorMessage}`);
-            }
-        } else {
-            message.error('请确保选择了房子并且已连接账户');
+        if (account == null) {
+            message.error('请先连接钱包');
+            return;
+        }
+        try {
+            await myERC20Contract.methods.approve(Addresses.BuyMyRoom, houseInfo.price).send({
+                from: account
+            })
+            // 调用购买房屋的函数
+            const fee = await BuyMyRoomContract.methods.getSellingFee(selectedHouseId).call();
+            await BuyMyRoomContract.methods.buyHouse(selectedHouseId).send({ from: account });
+            message.success(`成功购买房子 ${selectedHouseId}，手续费为${Number(fee)}`);
+            setIsConfirmModalVisible(false);
+            getAllHouse();
+        } catch (error: any) {
+            message.error(`${error.message}`);
         }
     };
 

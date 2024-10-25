@@ -23,14 +23,14 @@
 - `MyERC20.sol`：主要实现了一个自定义的ERC20代币，可以支持铸造、销毁代币、转账等ERC20的主要功能。
 
 - **`Trade.sol`(bonus)**：主要实现了一个恒定乘积自动做市商的算法。此算法可以保持市场的流通性，防止ERC20失去流通性。
-    - 可以添加流通性，铸造LP份额$\sqrt{\Delta x \Delta y}$（首次）、$\Delta L = L \cdot \min\{\frac{\Delta x}{x},\frac{\Delta y}{y}\}$（非首次）
+    - 可以添加流通性，铸造LP份额$`\sqrt{\Delta x \Delta y}`$（首次）、$`\Delta L = L \cdot \min\{\frac{\Delta x}{x},\frac{\Delta y}{y}\}`$（非首次）
     - （暂未实现移除流动性、因为此系统主要功能与此不相关）
-    - 交易（用ETH换ERC20、用ERC20换ETH），$\Delta y = - \frac{\Delta x y}{x + \Delta x}$
+    - 交易（用ETH换ERC20、用ERC20换ETH），$`\Delta y = - \frac{\Delta x y}{x + \Delta x}`$
 
 
 ## 运行方法（本地ganache环境）
 
-1. 克隆仓库`git clone `
+1. 克隆仓库`git clone https://github.com/dyxg/ZJU-blockchain-course-2024.git`
 
 2. 在ganache中新建本地区块链网络（端口设置为7545）。
 
